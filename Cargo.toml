@@ -1,0 +1,9 @@
+[package]
+
+name = "SudokuSolver"
+version = "0.0.1"
+authors = ["Alex Luecke <me@alexjl.com>"]
+
+[[bin]]
+name = "sudoku_solve"
+path = "src/main.rs"
