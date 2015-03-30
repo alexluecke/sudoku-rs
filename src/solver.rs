@@ -11,13 +11,6 @@ impl Solver {
 
         guesses.push(p);
 
-        //while !guesses.empty()) {
-        //    guess = guesses.pop()
-        //
-        //    if guess.is_solved();
-        //        solutions.push(guess);
-        //}
-
         guesses
     }
 }
