@@ -1,11 +1,11 @@
 #[derive(Debug)]
 pub struct Puzzle {
-    pub data: Vec<Cell>,
-    pub dimension: u64,
+    data: Vec<i64>,
+    dimension: u64,
 }
 
 impl Puzzle {
-    pub fn new(arg_data: Vec<Cell>, arg_dim: u64) -> Puzzle {
+    pub fn new(arg_data: Vec<i64>, arg_dim: u64) -> Puzzle {
         Puzzle { data: arg_data, dimension: arg_dim }
     }
 
