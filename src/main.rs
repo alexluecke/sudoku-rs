@@ -1,12 +1,9 @@
-#![feature(io)]
-
 extern crate SudokuSolver;
 
 use SudokuSolver::puzzle::Puzzle;
 use SudokuSolver::solver::Solver;
 
 use std::string::String;
-use std::fmt;
 use std::io;
 use std::io::prelude::*;
 

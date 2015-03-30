@@ -1,5 +1,3 @@
-use cell::Cell;
-
 #[derive(Debug)]
 pub struct Puzzle {
     data: Vec<i64>,
