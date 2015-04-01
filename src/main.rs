@@ -1,7 +1,7 @@
 extern crate SudokuSolver;
 
 use SudokuSolver::puzzle::Puzzle;
-use SudokuSolver::cell::Cell;
+use SudokuSolver::solver::Solver;
 
 use std::string::String;
 use std::io;
@@ -16,22 +16,14 @@ fn main() {
         break;
     }
 
-    let cells: Vec<Cell> = input.chars()
+    let int_values: Vec<i64> = input.chars()
         .map(|c| c as i64 - 48 )
-        .map(|x| if x >= 0 && x <= 9 {
-                Cell::new(x)
-            } else {
-                Cell::new(-1)
-            })
+        .map(|x| if x >= 0 && x <= 9 { x } else { -1 } )
         .collect();
 
-    //println!("{:?}", cells);
+    let puzzle = Puzzle::new(int_values, 9);
+    let solutions = Solver::solve(puzzle);
 
-    let puzzle = Puzzle::new(cells, 9);
-
-    println!("{:?}", puzzle);
-
-    //let solutions = Solver::solve(puzzle);
-
+    println!("{:?}", solutions);
 
 }
