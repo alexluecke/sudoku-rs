@@ -1,29 +1,28 @@
-extern crate SudokuSolver;
-
-use SudokuSolver::puzzle::Puzzle;
-use SudokuSolver::solver::Solver;
-
-use std::string::String;
 use std::io;
 use std::io::prelude::*;
 
+extern crate SudokuSolver;
+
+pub mod puzzle;
+pub mod helper;
+pub mod sudoku;
+
+use puzzle::Puzzle;
+
 fn main() {
     let stdin = io::stdin();
-    let mut input = String::with_capacity(81);
+    let mut input = String::new();
 
-    for line in stdin.lock().lines() {
-        input = line.unwrap();
-        break;
-    }
+    stdin.lock().read_line(&mut input).ok()
+        .expect("Please provide input.");
 
-    let int_values: Vec<i64> = input.chars()
-        .map(|c| c as i64 - 48 )
-        .map(|x| if x >= 0 && x <= 9 { x } else { -1 } )
+    let cells: Vec<_> = input.chars().take(81)
+        .filter(|&c| c.to_digit(10) != None )
+        .map(|x| x.to_digit(10).unwrap() as u8 )
         .collect();
 
-    let puzzle = Puzzle::new(int_values, 9);
-    let solutions = Solver::solve(puzzle);
+    let p = Puzzle::from_vec(&cells);
 
-    println!("{:?}", solutions);
+    println!("{:?}", p);
 
 }
