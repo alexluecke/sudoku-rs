@@ -2,21 +2,31 @@ use std::fmt;
 use self::CellStatus::{ SOLVED, UNSOLVED };
 use helper::u8_to_ascii;
 
-enum CellStatus { SOLVED, UNSOLVED }
+#[derive(PartialEq)]
+pub enum CellStatus { SOLVED, UNSOLVED }
 
 pub struct Puzzle {
-    cells: Vec<Cell>,
+    grid: Vec<Vec<Cell>>,
 }
 
 pub struct Cell {
     data: u8,
     status: CellStatus,
+    possible: Vec<u8>
 }
 
 impl Cell {
     pub fn new(d: u8) -> Cell {
-        let status = match d > 0 { true => SOLVED, _ => UNSOLVED };
-        Cell { data: d, status: status }
+
+        let s = match d > 0 { true => SOLVED, _ => UNSOLVED };
+
+        // Fill with possible numbers to guess and cull per cell
+        let p = match d > 0 {
+            true => vec![1,2,3,4,5,6,7,8,9],
+            _ => vec![]
+        };
+
+        Cell { data: d, status: s, possible: p  }
     }
 
     pub fn decide(&mut self, v: u8) {
@@ -24,39 +34,37 @@ impl Cell {
         self.status = SOLVED;
     }
 
+    pub fn get_status(&self) -> &CellStatus {
+        &self.status
+    }
+
     pub fn get_data(&self) -> u8 {
         self.data
     }
+
 }
 
 impl Puzzle {
-    pub fn new(v: Vec<Cell>) -> Puzzle {
-        Puzzle { cells: v }
+    pub fn new(v: Vec<Vec<Cell>>) -> Puzzle {
+        Puzzle { grid: v }
     }
 
-    pub fn from_vec(v: &[u8]) -> Puzzle {
-        let data: Vec<_> = v.iter()
-            .map(|&x| if x > 0 && x < 10 {
-                Cell::new(x)
-            } else {
-                Cell::new(0)
-            }).collect();
-        Puzzle::new(data)
-    }
-
-    pub fn get_cells(&self) -> &Vec<Cell> {
-        &self.cells
+    pub fn get_grid(&self) -> &Vec<Vec<Cell>> {
+        &self.grid
     }
 }
 
 impl fmt::Debug for Puzzle {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let mut s = String::new();
-        let mut x = 1;
-        for c in self.cells.iter() {
-            s.push(u8_to_ascii(c.data));
-            x += 1;
+        for row in self.grid.iter() {
+            println!("{:?}", row);
         }
-        write!(f, "{}", s)
+        write!(f, "")
+    }
+}
+
+impl fmt::Debug for Cell {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.data)
     }
 }

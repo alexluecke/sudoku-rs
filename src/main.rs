@@ -3,26 +3,37 @@ use std::io::prelude::*;
 
 extern crate SudokuSolver;
 
-pub mod puzzle;
+pub type Grid = Vec<Vec<u8>>;
+
 pub mod helper;
 pub mod sudoku;
 
-use puzzle::Puzzle;
+use sudoku::Sudoku;
 
 fn main() {
-    let stdin = io::stdin();
-    let mut input = String::new();
 
-    stdin.lock().read_line(&mut input).ok()
-        .expect("Please provide input.");
+    let mut puzzle: Grid = Vec::new();
+    let reader = io::stdin();
+    for l in reader.lock().lines().take(9) {
 
-    let cells: Vec<_> = input.chars().take(81)
-        .filter(|&c| c.to_digit(10) != None )
-        .map(|x| x.to_digit(10).unwrap() as u8 )
-        .collect();
+        // need this or else lifetime is not long enough
+        let line = l.unwrap().replace(" ", "");
 
-    let p = Puzzle::from_vec(&cells);
+        let rv: Vec<_> = line // row values
+            .trim()
+            .split(',')
+            .take(9)
+            .map(|x| {
+                x.parse::<u8>().ok().expect("Expected a number.")
+            })
+            .collect();
 
-    println!("{:?}", p);
+
+        puzzle.push(rv);
+
+    }
+
+    let solver = Sudoku::new(puzzle);
+    solver.solve();
 
 }
