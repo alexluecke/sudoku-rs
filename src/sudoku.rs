@@ -21,17 +21,19 @@ impl Sudoku {
     }
 
     pub fn solve(&mut self) {
-        let mut empty: Vec<Coord> = Vec::new();
-        let mut not_empty: Vec<Coord> = Vec::new();
         let mut simplification_found = true;
 
-        while (simplification_found) {
+        while simplification_found {
             for row in 0..9 {
                 for col in 0..9 {
                     self.remove_impossible((row, col));
                 }
             }
+
             simplification_found = self.find_simplification();
+
+            if !simplification_found {
+            }
         }
 
         for row in 0..9 {
@@ -61,11 +63,23 @@ impl Sudoku {
     fn remove_impossible(&mut self, coord: Coord) {
         let (n, m) = coord;
         let value = self.grid[n][m];
+
+        // check row
         for row in 0..9 {
             self.possible[row][m].retain(|&x| x != value);
         }
+
+        // check col
         for col in 0..9 {
             self.possible[n][col].retain(|&x| x != value);
+        }
+
+        // check the blocks
+        let (c, d) = (n%3 as usize, m%3 as usize);
+        for row in (n-c)..(n-c+3) {
+            for col in (m-d)..(m-d+3) {
+                self.possible[row][col].retain(|&x| x != value);
+            }
         }
     }
 }
