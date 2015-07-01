@@ -33,7 +33,7 @@ fn main() {
 
     }
 
-    let solver = Sudoku::new(puzzle);
+    let mut solver = Sudoku::new(puzzle);
     solver.solve();
 
 }
