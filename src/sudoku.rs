@@ -74,7 +74,7 @@ impl Sudoku {
             self.possible[n][col].retain(|&x| x != value);
         }
 
-        // check the blocks
+            // check the blocks
         let (c, d) = (n%3 as usize, m%3 as usize);
         for row in (n-c)..(n-c+3) {
             for col in (m-d)..(m-d+3) {
