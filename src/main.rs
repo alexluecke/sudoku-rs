@@ -1,29 +1,39 @@
-extern crate SudokuSolver;
-
-use SudokuSolver::puzzle::Puzzle;
-use SudokuSolver::solver::Solver;
-
-use std::string::String;
 use std::io;
 use std::io::prelude::*;
 
-fn main() {
-    let stdin = io::stdin();
-    let mut input = String::with_capacity(81);
+extern crate SudokuSolver;
 
-    for line in stdin.lock().lines() {
-        input = line.unwrap();
-        break;
+pub type Grid = Vec<Vec<u8>>;
+
+pub mod helper;
+pub mod sudoku;
+
+use sudoku::Sudoku;
+
+fn main() {
+
+    let mut puzzle: Grid = Vec::new();
+    let reader = io::stdin();
+    for l in reader.lock().lines().take(9) {
+
+        // need this or else lifetime is not long enough
+        let line = l.unwrap().replace(" ", "");
+
+        let rv: Vec<_> = line // row values
+            .trim()
+            .split(',')
+            .take(9)
+            .map(|x| {
+                x.parse::<u8>().ok().expect("Expected a number.")
+            })
+            .collect();
+
+
+        puzzle.push(rv);
+
     }
 
-    let int_values: Vec<i64> = input.chars()
-        .map(|c| c as i64 - 48 )
-        .map(|x| if x >= 0 && x <= 9 { x } else { -1 } )
-        .collect();
-
-    let puzzle = Puzzle::new(int_values, 9);
-    let solutions = Solver::solve(puzzle);
-
-    println!("{:?}", solutions);
+    let mut solver = Sudoku::new(puzzle);
+    solver.solve();
 
 }
