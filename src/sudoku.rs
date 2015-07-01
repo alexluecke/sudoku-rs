@@ -32,6 +32,10 @@ impl Sudoku {
 
             simplification_found = self.find_simplification();
 
+            // TODO: If no more simplificaitons are found and the puzzle isn't solved, we need to
+            // resort to guessing a checking. To do this we need to keep a stack of guessed
+            // puzzles, if they produce a contradiction, pop them from the stack and remove that
+            // guessed value that produced a contradiction from the set of possible cell values.
             if !simplification_found {
             }
         }
@@ -74,7 +78,7 @@ impl Sudoku {
             self.possible[n][col].retain(|&x| x != value);
         }
 
-            // check the blocks
+        // check the blocks
         let (c, d) = (n%3 as usize, m%3 as usize);
         for row in (n-c)..(n-c+3) {
             for col in (m-d)..(m-d+3) {
